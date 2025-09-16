@@ -1,0 +1,103 @@
+VAR_ID,VAR_LABEL,VAR_DESCRIPTION
+B01003_001,TOTAL,total population
+B01001_002,MALE,total male population
+B01001_020,MALE_65to66,males aged 65 to 66
+B01001_021,MALE_67to69,males aged 67 to 69
+B01001_022,MALE_70to74,males aged 70 to 74
+B01001_023,MALE_75to79,males aged 75 to 79
+B01001_024,MALE_80to84,males aged 80 to 84
+B01001_025,MALE_85over,males aged 85 and over
+B01001_026,FEMALE,total female population
+B01001_044,FEMALE_65to66,females aged 65 to 66
+B01001_045,FEMALE_67to69,females aged 67 to 69
+B01001_046,FEMALE_70to74,females aged 70 to 74
+B01001_047,FEMALE_75to79,females aged 75 to 79
+B01001_048,FEMALE_80to84,females aged 80 to 84
+B01001_049,FEMALE_85over,females aged 85 and over
+B01001A_001,WHITE_POP,total white population 
+B01001A_014,WHITE_65to74M,white males aged 65 to 74
+B01001A_015,WHITE_75to84M,white males aged 75 to 84
+B01001A_016,WHITE_85overM,white males aged 85 and over
+B01001A_029,WHITE_65to74F,white females aged 65 to 74
+B01001A_030,WHITE_75to84F,white females aged 75 to 84
+B01001A_031,WHITE_85overF,white females aged 85 and over
+B01001B_001,BLACK_POP,total black population 
+B01001B_014,BLACK_65to74M,black males aged 65 to 74
+B01001B_015,BLACK_75to84M,black males aged 75 to 84
+B01001B_016,BLACK_85overM,black males aged 85 and over
+B01001B_029,BLACK_65to74F,black females aged 65 to 74
+B01001B_030,BLACK_75to84F,black females aged 75 to 84
+B01001B_031,BLACK_85overF,black females aged 85 and over
+B01001C_001,AMIND_POP,total american indian population 
+B01001C_014,AMIND_65to74M,american indian males aged 65 to 74
+B01001C_015,AMIND_75to84M,american indian males aged 75 to 84
+B01001C_016,AMIND_85overM,american indian males aged 85 and over
+B01001C_029,AMIND_65to74F,american indian females aged 65 to 74
+B01001C_030,AMIND_75to84F,american indian females aged 75 to 84
+B01001C_031,AMIND_85overF,american indian females aged 85 and over
+B01001D_001,ASIAN_POP,total asian population 
+B01001D_014,ASIAN_65to74M,asian males aged 65 to 74
+B01001D_015,ASIAN_75to84M,asian males aged 75 to 84
+B01001D_016,ASIAN_85overM,asian males aged 85 and over
+B01001D_029,ASIAN_65to74F,asian females aged 65 to 74
+B01001D_030,ASIAN_75to84F,asian females aged 75 to 84
+B01001D_031,ASIAN_85overF,asian females aged 85 and over
+B01001E_001,PACISL_POP,total native hawaiian and pacific islander population 
+B01001E_014,PACISL_65to74M,native hawaiian and pacific islander males aged 65 to 74
+B01001E_015,PACISL_75to84M,native hawaiian and pacific islander males aged 75 to 84
+B01001E_016,PACISL_85overM,native hawaiian and pacific islander males aged 85 and over
+B01001E_029,PACISL_65to74F,native hawaiian and pacific islander females aged 65 to 74
+B01001E_030,PACISL_75to84F,native hawaiian and pacific islander females aged 75 to 84
+B01001E_031,PACISL_85overF,native hawaiian and pacific islander females aged 85 and over
+B01001F_001,OTHER_POP,total population with some other race reported
+B01001F_014,OTHER_65to74M,males with some other race reported aged 65 to 74
+B01001F_015,OTHER_75to84M,males with some other race reported aged 75 to 84
+B01001F_016,OTHER_85overM,males with some other race reported aged 85 and over
+B01001F_029,OTHER_65to74F,females with some other race reported aged 65 to 74
+B01001F_030,OTHER_75to84F,females with some other race reported aged 75 to 84
+B01001F_031,OTHER_85overF,females with some other race reported aged 85 and over
+B01001G_001,MIXED_POP,total population with two or more races reported 
+B01001G_014,MIXED_65to74M,males with two or more races reported aged 65 to 74
+B01001G_015,MIXED_75to84M,males with two or more races reported aged 75 to 84
+B01001G_016,MIXED_85overM,males with two or more races reported aged 85 and over
+B01001G_029,MIXED_65to74F,females with two or more races reported aged 65 to 74
+B01001G_030,MIXED_75to84F,females with two or more races reported aged 75 to 84
+B01001G_031,MIXED_85overF,females with two or more races reported aged 85 and over
+B01001I_001,HISPLAT_POP,total hispanic or latino population
+B01001I_014,HISPLAT_65to74M,hispanic or latino males aged 65 to 74
+B01001I_015,HISPLAT_75to84M,hispanic or latino males aged 75 to 84
+B01001I_016,HISPLAT_85overM,hispanic or latino males aged 85 and over
+B01001I_029,HISPLAT_65to74F,hispanic or latino females aged 65 to 74
+B01001I_030,HISPLAT_75to84F,hispanic or latino females aged 75 to 84
+B01001I_031,HISPLAT_85overF,hispanic or latino females aged 85 and over
+B15001_038,HIGHSCH_65overM,males over 65 with high school education
+B15001_039,SOMECOLL_65overM,males over 65 with some college education
+B15001_040,ASSOCIATES_65overM,males over 65 with associates degree
+B15001_041,BACHELORS_65overM,males over 65 with bachelors degree
+B15001_042,GRADUATES_65overM,males over 65 with graduate degree
+B15001_079,HIGHSCH_65overF,females over 65 with high school education
+B15001_080,SOMECOLL_65overF,females over 65 with some college education
+B15001_081,ASSOCIATES_65overF,females over 65 with associates degree
+B15001_082,BACHELORS_65overF,females over 65 with bachelors degree
+B15001_083,GRADUATES_65overF,females over 65 with graduate degree
+B15002_011,HIGHSCH_M,males over 25 with high school education
+B15002_012,SOMECOL1_M,males over 25 with less than 1 year of college education but no degree
+B15002_013,SOMECOL2_M,males over 25 with more than 1 year of college but no degree
+B15002_014,ASSOCIATES_M,males over 25 with associates degree
+B15002_015,BACHELORS_M,males over 25 with bachelors degree
+B15002_016,MASTERS_M,males over 25 with masters degree
+B15002_017,PROFESS_M,males over 25 with professional degree
+B15002_018,PHD_M,males over 25 with doctorate degree
+B15002_028,HIGHSCH_F,females over 25 with high school education
+B15002_029,SOMECOL1_F,females over 25 with less than 1 year of college education but no degree
+B15002_030,SOMECOL2_F,females over 25 with more than 1 year of college but no degree
+B15002_031,ASSOCIATES_F,females over 25 with associates degree
+B15002_032,BACHELORS_F,females over 25 with bachelors degree
+B15002_033,MASTERS_F,females over 25 with masters degree
+B15002_034,PROFESS_F,females over 25 with professional degree
+B15002_035,PHD_F,females over 25 with doctorate degree
+B17001_002,POVERTY_POP,total population with income below poverty line
+B17001_015,POVERTY_65to74M,males 65 to 74 with income below poverty line
+B17001_016,POVERTY_75overM,males 75 and over with income below poverty line
+B17001_029,POVERTY_65to74F,females 65 to 74 with income below poverty line
+B17001_030,POVERTY_75overF,females 75 and over with income below poverty line

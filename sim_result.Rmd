@@ -1,0 +1,389 @@
+---
+title: "Compile results from simulations"
+author: "Shih-Ni Prim"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("functions_sim.R")
+library(xtable)
+```
+
+
+```{r}
+n <- 400
+n1 <- 20
+E <- 10
+R <- 5
+nz <- 10
+Qmat <- makeQ(20)
+W <- eigen(Qmat)$values
+reps <- 100
+
+beta <- matrix(c(3,-3,2,3,5,4,-2,4,5,7,2,-3,3,4,6,1,-4,2,3,4,5,1,3,4,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0), nrow = E, ncol = R, byrow = T)/10
+
+namez <- c("MSM_H_10", "MSM_H_20", "MSM_IG_10", "MSM_IG_20", "Naive", "Spatial+80", "Spatial+40", "USM_H_10")
+sim_namez <- c("sim1", "sim2", "sim3", "sim4")
+```
+
+
+* Setting 1, $\phi = 1, \beta_{XZ} = 1$
+* Setting 2, $\phi = 1, \beta_{XZ} = 2$
+* Setting 3, $\phi = 2, \beta_{XZ} = 1$
+* Setting 4, $\phi = 2, \beta_{XZ} = 2$
+
+
+### Boxplots of posterior means   
+
+The outputs are not provided due to limits of file size on GitHub.
+
+```{r}
+load("sim1.RData")
+load("sim2.RData")
+load("sim3.RData")
+load("sim4.RData")
+```
+
+
+## Compile results from all four settings  
+
+```{r}
+met <- list()
+sim <- list(sim1, sim2, sim3, sim4)
+for (i in 1:length(sim)){
+  met[[i]] <- metrics_over_all2(sim[[i]], beta, 8, 5)
+}
+```
+
+
+```{r}
+m <- 4
+MSE_nonzero <- combine_sim_res("MSE_ave1", m, namez)
+MSE_zero <- combine_sim_res("MSE_ave0", m, namez)
+Bias_nonzero <- combine_sim_res("bias_ave1", m, namez)
+Bias_zero <- combine_sim_res("bias_ave0", m, namez)
+Cov_nonzero <- combine_sim_res("cov_ave1", m, namez)
+Cov_zero <- combine_sim_res("cov_ave0", m, namez)
+SD_nonzero <- combine_sim_res("sd_ave1", m, namez)
+SD_zero <- combine_sim_res("sd_ave0", m, namez)
+LG_nonzero <- combine_sim_res("length_ave1", m, namez)
+LG_zero <- combine_sim_res("length_ave0", m, namez)
+```
+
+# Order the metrics
+
+These tables are included in the appendix.
+
+```{r}
+switch <- function(metric){
+  metric2 <- rbind(metric[1,], metric[8,], metric[5:7,])
+  rownames(metric2) <- c("MSM", "USM", "Naive", "Spatial+80", "Spatial+40")
+  return(metric2)
+}
+MSE_nonzero2 <- switch(MSE_nonzero)
+MSE_zero2 <- switch(MSE_zero)
+Bias_nonzero2 <- switch(Bias_nonzero)
+Bias_zero2 <- switch(Bias_zero)
+Cov_nonzero2 <- switch(Cov_nonzero)
+Cov_zero2 <- switch(Cov_zero)
+SD_nonzero2 <- switch(SD_nonzero)
+SD_zero2 <- switch(SD_zero) 
+LG_nonzero2 <- switch(LG_nonzero)
+LG_zero2 <- switch(LG_zero) 
+```
+
+
+
+# sim results combining zero and nonzero  
+
+```{r}
+met <- list()
+sim <- list(sim1, sim2, sim3, sim4)
+for (i in 1:length(sim)){
+  met[[i]] <- metrics_over_all3(sim[[i]], beta, 8)
+}
+```
+
+```{r}
+m <- 4
+MSE <- combine_sim_res("MSE_ave1", m, namez)
+Bias <- combine_sim_res("bias_ave1", m, namez)
+Cov <- combine_sim_res("cov_ave1", m, namez)
+SD <- combine_sim_res("sd_ave1", m, namez)
+LG <- combine_sim_res("length_ave1", m, namez)
+```
+
+
+```{r}
+MSE2 <- switch(MSE)
+Bias2 <- switch(Bias)
+Cov2 <- switch(Cov)
+SD2 <- switch(SD)
+LG2 <- switch(LG)
+```
+
+
+
+```{r}
+plot_result8 <- function(metric, name){
+  library(tidyverse)
+  res <- data.frame(metric)
+  res$model <- rownames(metric) 
+  res <- res %>% mutate(Model=factor(res$model, levels=c("MSM", "USM", "Naive", "Spatial+80", "Spatial+40")))
+  res_v2 <- res %>% dplyr::rename(Setting1 = setting.1, Setting2 = setting.2, Setting3 = setting.3, Setting4 = setting.4)
+  # , setting4 = setting.4
+  res_v3 <- tidyr::pivot_longer(res_v2, cols = Setting1:Setting4, names_to = "Setting", values_to = name)
+  res_v3$new_setting <- revalue(res_v3$Setting, c("Setting1" = "Setting 1",
+                                           "Setting2" = "Setting 2",
+                                           "Setting3" = "Setting 3",
+                                           "Setting4" = "Setting 4"))
+  if (name == "95% Coverage Rate"){
+    ggplot(data = res_v3, aes(x = new_setting, y = .data[[name]], fill = Model)) + geom_bar(stat = "identity", position = "dodge") + scale_fill_viridis_d() + xlab("") + coord_cartesian(ylim = c(.5, 1)) 
+  }
+  else {
+    ggplot(data = res_v3, aes(x = new_setting, y = .data[[name]], fill = Model)) + geom_bar(stat = "identity", position = "dodge") + scale_fill_viridis_d() + xlab("") 
+  }
+}
+
+metricz_name <- c("Mean Square Error", "Mean Absolute Bias", "95% Coverage Rate", "Mean SD", "mean LG")
+metricz <- list(MSE2, Bias2, Cov2, SD2, LG2)
+plotz <- list()
+for (i in 1:4){
+  plotz[[i]] <- plot_result8(metricz[[i]], metricz_name[i])
+}
+allres <- ggpubr::ggarrange(plotz[[1]], plotz[[2]], plotz[[3]], plotz[[4]], common.legend = TRUE, legend = "bottom")
+allres
+ggsave("allres2.png")
+```
+
+
+### Calculating Standard Error  
+
+```{r}
+se <- list()
+for (i in 1:length(sim)){
+  se[[i]] <- se_over_all2(sim[[i]], beta, 8, 5)
+}
+```
+
+```{r}
+m <- 4
+MSE_se_nonzero <- combine_sim(se, "MSE_se_ave1", m, namez)
+MSE_se_zero <- combine_sim(se, "MSE_se_ave0", m, namez)
+Bias_se_nonzero <- combine_sim(se, "bias_se_ave1", m, namez)
+Bias_se_zero <- combine_sim(se, "bias_se_ave0", m, namez)
+Cov_se_nonzero <- combine_sim(se, "cov_se_ave1", m, namez)
+Cov_se_zero <- combine_sim(se, "cov_se_ave0", m, namez)
+SD_se_nonzero <- combine_sim(se, "sd_se_ave1", m, namez)
+SD_se_zero <- combine_sim(se, "sd_se_ave0", m, namez)
+LG_se_nonzero <- combine_sim(se, "length_se_ave1", m, namez)
+LG_se_zero <- combine_sim(se, "length_se_ave0", m, namez)
+```
+
+#### Standard errors are included in the appendix
+
+```{r}
+print("MSE nonzero")
+MSE_se_nonzero
+MSE_se_nonzero2 <- switch(MSE_se_nonzero)
+round(t(MSE_se_nonzero2),2)
+
+print("MSE zero")
+MSE_se_zero
+MSE_se_zero2 <- switch(MSE_se_zero)
+round(t(MSE_se_zero2),2)
+
+print("Bias nonzero")
+Bias_se_nonzero
+Bias_se_nonzero2 <- switch(Bias_se_nonzero)
+round(t(Bias_se_nonzero2),2)
+
+print("Bias zero")
+Bias_se_zero
+Bias_se_zero2 <- switch(Bias_se_zero)
+round(t(Bias_se_zero2),2)
+
+
+print("SD nonzero")
+SD_se_nonzero
+SD_se_nonzero2 <- switch(SD_se_nonzero)
+round(t(SD_se_nonzero2),2)
+
+print("SD zero")
+SD_se_zero 
+SD_se_zero2 <- switch(SD_se_zero)
+round(t(SD_se_zero2),2)
+
+print("Cov nonzero")
+Cov_se_nonzero
+Cov_se_nonzero2 <- switch(Cov_se_nonzero)
+round(t(Cov_se_nonzero2),2)
+
+print("Cov zero")
+Cov_se_zero
+Cov_se_zero2 <- switch(Cov_se_zero)
+round(t(Cov_se_zero2),2)
+
+
+print("LG nonzero")
+LG_se_nonzero
+LG_se_nonzero2 <- switch(LG_se_nonzero)
+round(t(LG_se_nonzero2),2)
+
+print("LG zero")
+LG_se_zero 
+LG_se_zero2 <- switch(LG_se_zero)
+round(t(LG_se_zero2),2)
+
+```
+
+#### Use xtable to make tables
+
+```{r}
+print(xtable(t(MSE_se_nonzero), type = "latex", caption = "MSE (nonzero)", label = "t:MSE_se1"), file = "table9.tex")
+print(xtable(t(Bias_se_nonzero), type = "latex", caption = "Bias (nonzero)", label = "t:bias_se1"), file = "table10.tex")
+print(xtable(t(SD_se_nonzero), type = "latex", caption = "SD (nonzero)", label = "t:sd_se1"), file = "table11.tex")
+print(xtable(t(Cov_se_nonzero), type = "latex", caption = "Coverage (nonzero)", label = "t:cov_se1"), file = "table12.tex")
+print(xtable(t(LG_se_nonzero), type = "latex", caption = "Length (nonzero)", label = "t:lg_se1"), file = "table19.tex")
+
+```
+
+```{r}
+print(xtable(t(MSE_se_zero), type = "latex", caption = "MSE (zero)", label = "t:MSE_se0"), file = "table13.tex")
+print(xtable(t(Bias_se_zero), type = "latex", caption = "Bias (zero)", label = "t:bias_se0"), file = "table14.tex")
+print(xtable(t(SD_se_zero), type = "latex", caption = "SD (zero)", label = "t:sd_se0"), file = "table15.tex")
+print(xtable(t(Cov_se_zero), type = "latex", caption = "Coverage (zero)", label = "t:cov_se0"), file = "table16.tex")
+print(xtable(t(LG_se_zero), type = "latex", caption = "Length (zero)", label = "t:lg_se0"), file = "table20.tex")
+```
+
+
+
+## Sensitivity Tests L and K  
+
+```{r}
+sim <- list()
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L5_K2.RData")
+sim_L5_K2 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L5_K5.RData")
+sim_L5_K5 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L5_K10.RData")
+sim_L5_K10 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L10_K2.RData")
+sim_L10_K2 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L10_K5.RData")
+sim_L10_K5 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L10_K10.RData")
+sim_L10_K10 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L20_K2.RData")
+sim_L20_K2 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L20_K5.RData")
+sim_L20_K5 <- sim
+load("C:/Users/shihn/Documents/research/simulation/setting19/sim_L20_K10.RData")
+sim_L20_K10 <- sim
+```
+
+
+```{r}
+res_LK <- array(NA, c(400,10,5,7,9,20))
+res_LK[,,,,1,] <- sim_L5_K2[,,,,1,]
+res_LK[,,,,2,] <- sim_L5_K5[,,,,1,]
+res_LK[,,,,3,] <- sim_L5_K10[,,,,1,]
+res_LK[,,,,4,] <- sim_L10_K2[,,,,1,]
+res_LK[,,,,5,] <- sim_L10_K5[,,,,1,]
+res_LK[,,,,6,] <- sim_L10_K10[,,,,1,]
+res_LK[,,,,7,] <- sim_L20_K2[,,,,1,]
+res_LK[,,,,8,] <- sim_L20_K5[,,,,1,]
+res_LK[,,,,9,] <- sim_L20_K10[,,,,1,]
+```
+
+```{r}
+met <- list()
+sim <- list(res_LK, res_LK)
+for (i in 1:length(sim)){
+  met[[i]] <- metrics_over_all2(sim[[i]], beta, 9, 5)
+}
+```
+
+
+```{r}
+namez <- c("sim_L5_K2", "sim_L5_K5", "sim_L5_K10", "sim_L10_K2", "sim_L10_K5", "sim_L10_K10", "sim_L20_K2", "sim_L20_K5", "sim_L20_K10")
+m <- 2
+MSE_nonzero <- combine_sim_res("MSE_ave1", m, namez)
+MSE_zero <- combine_sim_res("MSE_ave0", m, namez)
+Bias_nonzero <- combine_sim_res("bias_ave1", m, namez)
+Bias_zero <- combine_sim_res("bias_ave0", m, namez)
+Cov_nonzero <- combine_sim_res("cov_ave1", m, namez)
+Cov_zero <- combine_sim_res("cov_ave0", m, namez)
+SD_nonzero <- combine_sim_res("sd_ave1", m, namez)
+SD_zero <- combine_sim_res("sd_ave0", m, namez)
+LG_nonzero <- combine_sim_res("length_ave1", m, namez)
+LG_zero <- combine_sim_res("length_ave0", m, namez)
+```
+
+
+```{r}
+combined_LK <- cbind(MSE_nonzero[,1], MSE_zero[,1], Bias_nonzero[,1],Bias_zero[,1],Cov_nonzero[,1],Cov_zero[,1], SD_nonzero[,1], SD_zero[,1], LG_nonzero[,1], LG_zero[,1])
+colnames(combined_LK) <- c("MSE_nonzero", "MSE_zero", "Bias_nonzero", "Bias_zero", "Cov_nonzero", "Cov_zero", "SD_nonzero", "SD_zero", "LG_nonzero", "LG_zero")
+round(combined_LK,4)
+```
+
+```{r}
+se <- list()
+for (i in 1:length(sim)){
+  se[[i]] <- se_over_all2(sim[[i]], beta, 9, 5)
+}
+```
+
+```{r}
+m <- 2
+MSE_se_nonzero <- combine_sim(se, "MSE_se_ave1", m, namez)
+MSE_se_zero <- combine_sim(se, "MSE_se_ave0", m, namez)
+Bias_se_nonzero <- combine_sim(se, "bias_se_ave1", m, namez)
+Bias_se_zero <- combine_sim(se, "bias_se_ave0", m, namez)
+Cov_se_nonzero <- combine_sim(se, "cov_se_ave1", m, namez)
+Cov_se_zero <- combine_sim(se, "cov_se_ave0", m, namez)
+SD_se_nonzero <- combine_sim(se, "sd_se_ave1", m, namez)
+SD_se_zero <- combine_sim(se, "sd_se_ave0", m, namez)
+LG_se_nonzero <- combine_sim(se, "length_se_ave1", m, namez)
+LG_se_zero <- combine_sim(se, "length_se_ave0", m, namez)
+```
+
+```{r}
+print("MSE nonzero")
+MSE_se_nonzero
+
+print("MSE zero")
+MSE_se_zero
+
+print("Bias nonzero")
+Bias_se_nonzero
+
+print("Bias zero")
+Bias_se_zero
+
+print("Cov nonzero")
+Cov_se_nonzero
+
+print("Cov zero")
+Cov_se_zero
+
+print("SD nonzero")
+SD_se_nonzero
+
+print("SD zero")
+SD_se_zero 
+
+```
+
+
+```{r}
+combined_LK_se <- cbind(MSE_se_nonzero[,1], MSE_se_zero[,1], Bias_se_nonzero[,1],Bias_se_zero[,1],Cov_se_nonzero[,1],Cov_se_zero[,1], SD_se_nonzero[,1], SD_se_zero[,1], LG_se_nonzero[,1], LG_se_zero[,1])
+colnames(combined_LK) <- c("MSE_nonzero", "MSE_zero", "Bias_nonzero", "Bias_zero", "Cov_nonzero", "Cov_zero", "SD_nonzero", "SD_zero", "LG_nonzero", "LG_zero")
+round(combined_LK_se,4)
+```
+
+
+
+

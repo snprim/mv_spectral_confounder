@@ -1,0 +1,29 @@
+VAR_ID,Description
+C17002_001,Total Population Whose Poverty Status is Known
+C17002_008,People with Ratio of Income to Poverty from 2 and over
+B03002_001,Total Population All races ethnicities
+B03002_003,Total Population Non-Hispanic White Alone
+B23025_003,Total Civilian Labor Force
+B23025_005,Civilian Labor Force Unemployed
+B15002_001,Total Population Age 25 over
+B15002_003,Male No Schooling Completed
+B15002_004,Male Nursery to 4th Grade
+B15002_005,Male 5th and 6th Grade
+B15002_006,Male 7th and 8th Grade
+B15002_007,Male 9th Grade
+B15002_008,Male 10th Grade
+B15002_009,Male 11th Grade
+B15002_010,Male 12th Grade No Diploma
+B15002_020,Female No Schooling Completed
+B15002_021,Female Nursery to 4th Grade
+B15002_022,Female 5th and 6th Grade
+B15002_023,Female 7th and 8th Grade
+B15002_024,Female 9th Grade
+B15002_025,Female 10th Grade
+B15002_026,Female 11th Grade
+B15002_027,Female 12th Grade No Diploma
+B16002_001,Total Households
+B16002_004,Limited English Speaking Spanish
+B16002_007,Limited English Speaking Other IndoEuropean Languages
+B16002_010,Limited English Speaking Asian Pacific Island Languages
+B16002_013,Limited English Speaking Other Languages
